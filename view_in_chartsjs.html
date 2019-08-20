@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Security-Policy" content="script-src * data: blob: 'unsafe-inline' 'unsafe-eval'; style-src * data: blob: 'unsafe-inline';">
+    <title>Gitlab Usage Data</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="chartjsdata.js"></script>
+  <script type="text/javascript" >
+
+  var user_project_config = {
+    type: 'bar',
+    data: by_user_by_project,
+    options: {
+      title: {
+        display: true,
+        text: 'Gitlab Usage by User by Project'
+      },
+      tooltips: {
+        mode: 'nearest',
+        intersect: true
+      },
+      responsive: true,
+      scales: {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    }
+  };
+
+  var internal_external_config = {
+  			type: 'line',
+  			data: internal_external,
+  			options: {
+  				responsive: true,
+  				title: {
+  					display: true,
+  					text: 'Commits by Organization (internal vs. external)'
+  				},
+  				tooltips: {
+  					mode: 'index',
+  					intersect: false,
+  				},
+  				hover: {
+  					mode: 'nearest',
+  					intersect: true
+  				},
+  				scales: {
+  					xAxes: [{
+  						display: true,
+  						scaleLabel: {
+  							display: true,
+  							labelString: 'Week'
+  						}
+  					}],
+  					yAxes: [{
+  						display: true,
+  						scaleLabel: {
+  							display: true,
+  							labelString: 'Value'
+  						}
+  					}]
+  				}
+  			}
+  		};
+      var all_users_commits_by_day = {
+      			type: 'line',
+      			data: all_commits,
+      			options: {
+      				responsive: true,
+      				title: {
+      					display: true,
+      					text: 'Commits by Individual By Day'
+      				},
+      				tooltips: {
+      					mode: 'index',
+      					intersect: false,
+      				},
+      				hover: {
+      					mode: 'nearest',
+      					intersect: false
+      				},
+      				scales: {
+      					xAxes: [{
+      						display: true,
+      						scaleLabel: {
+      							display: true,
+      							labelString: 'Day'
+      						}
+      					}],
+      					yAxes: [{
+      						display: true,
+      						scaleLabel: {
+      							display: true,
+      							labelString: 'Value'
+      						}
+      					}]
+      				}
+      			}
+      		};
+
+  window.onload = function() {
+        document.getElementById("date_range").innerText = date_range;
+        document.getElementById("total_commits").innerText = total_commits;
+        var ctx1 = document.getElementById('internal_external').getContext('2d');
+        window.myLine = new Chart(ctx1, internal_external_config);
+  			var ctx2 = document.getElementById('user_project').getContext('2d');
+        window.myBar = new Chart(ctx2, user_project_config);
+        var ctx3 = document.getElementById('all_commits').getContext('2d');
+        window.myBar = new Chart(ctx3, all_users_commits_by_day);
+
+
+
+  		};
+  </script>
+  <style type="text/css">
+  body {
+    text-align:center;
+  }
+  </style>
+  </head>
+  <body>
+<div style="width:90%;text-align:center;margin:0px auto;"><span id="date_range"></span><br /><br />
+Total Commits: <span id="total_commits"></span>
+</div>
+<div style="width:90%;height:90%;margin:0px auto;"><canvas id="internal_external" ></canvas></div>
+<div style="width:90%;height:90%;margin:0px auto;"><canvas id="user_project" ></canvas></div>
+<div style="width:90%;height:90%;margin:0px auto;"><canvas id="all_commits" ></canvas></div>
+
+
+
+  </body>
+</html>
